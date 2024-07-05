@@ -1,0 +1,31 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Blog web app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "dev": "nodemon server.js",
+    "build":"npm i"
+  },
+  "author": "Sohail Khan",
+  "license": "ISC",
+  "dependencies": {
+    "bad-words": "^3.0.4",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.41.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jimp": "^0.22.12",
+    "jsonwebtoken": "^9.0.1",
+    "mailgen": "^2.0.27",
+    "mongodb": "^5.6.0",
+    "mongoose": "^7.3.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.3",
+    "nodemon": "^3.1.4"
+  }
+}
