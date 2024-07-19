@@ -292,7 +292,7 @@ const generateVerificationTokenCtrl = expressAsyncHandler(async (req, res) => {
         await user.save();
         // console.log(verificationToken);
         //Build your message
-        const resetURL = `If your were requested to verify your account, please verify your account within 10 mins, otherwise ignore this meassage <a href="https://blogster-3m69.onrender.com/verify-account/${verificationToken}">Click to verify your account<a/>`;
+        const resetURL = `If your were requested to verify your account, please verify your account within 10 mins, otherwise ignore this meassage <a href="https://blogmantra-backend.onrender.com/verify-account/${verificationToken}">Click to verify your account<a/>`;
         // const testAccount = await nodemailer.createTestAccount();
         const transporter = await nodemailer.createTransport({
             service: 'gmail',
@@ -324,7 +324,7 @@ const generateVerificationTokenCtrl = expressAsyncHandler(async (req, res) => {
                     button: {
                         color: '#22BC66', // Optional action button color
                         text: 'Verify your account',
-                        link: `https://blogster-3m69.onrender.com/verify-account/${verificationToken}`
+                        link: `https://blogmantra-backend.onrender.com/verify-account/${verificationToken}`
                     }
                 },
                 outro: 'Do not reply to this email, It is an auto-generated email'
@@ -387,7 +387,7 @@ const forgotPasswordTokenCtrl = expressAsyncHandler(async (req, res) => {
         await user.save();
 
         //build your message
-        const resetURL = `If your were requested to reset your account, please reset your account within 10 mins, otherwise ignore this meassage <a href="https://blogster-3m69.onrender.com/reset-password/${token}">Click to verify your account<a/>`;
+        const resetURL = `If your were requested to reset your account, please reset your account within 10 mins, otherwise ignore this meassage <a href="https://blogmantra-backend.onrender.com/reset-password/${token}">Click to verify your account<a/>`;
         // const testAccount = await nodemailer.createTestAccount();
         const transporter = await nodemailer.createTransport({
             service: 'gmail',
@@ -420,7 +420,7 @@ const forgotPasswordTokenCtrl = expressAsyncHandler(async (req, res) => {
                     button: {
                         color: '#22BC66', // Optional action button color
                         text: 'Reset Password',
-                        link: `https://blogster-3m69.onrender.com/reset-password/${token}`
+                        link: `https://blogmantra-backend.onrender.com/reset-password/${token}`
                     }
                 },
                 outro: 'Do not reply to this email, It is an auto-generated email'
