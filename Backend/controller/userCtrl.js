@@ -13,23 +13,35 @@ const blockUser = require("../util/blockUser");
 //          --- Register --- //
 // --------------------------------------//
 const userRegisterCtrl = expressAsyncHandler(async (req, res) => {
-    // ---   business logic ---//
-
-    //check if user already registered
-    const userExists = await User.findOne({ email: req?.body?.email })
-    if (userExists) throw new Error("User Already registered");
     try {
-        const user = await User.create({
-            firstName: req?.body?.firstName,
-            lastName: req?.body?.lastName,
-            email: req?.body?.email,
-            password: req?.body?.password
-        })
-        res.json(user);
-    } catch (err) {
-        res.json(err);
+        // Check if user already registered by email
+        const userExists = await User.findOne({ email: req.body.email });
+        if (userExists) {
+            throw new Error("User already registered");
+        }
+
+        // Create new user
+        const newUser = await User.create({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: req.body.password
+        });
+
+        res.json(newUser);
+    } catch (error) {
+        // Check if MongoDB duplicate key error
+        if (error.code === 11000 && error.keyPattern && error.keyValue) {
+            const fieldName = Object.keys(error.keyPattern)[0];
+            const fieldValue = error.keyValue[fieldName];
+            return res.status(400).json({
+                message: `${fieldName} '${fieldValue}' already exists. Please use a different ${fieldName}.`
+            });
+        }
+
+        // Handle other errors
+        res.status(500).json({ message: error.message || "Something went wrong" });
     }
-    // res.json({user: "User registered"});
 });
 
 // --------------------------------------//
@@ -58,8 +70,6 @@ const userLoginCtrl = expressAsyncHandler(async (req, res) => {
         res.status(401)
         throw new Error("Invalid Login Credentials");
     }
-
-
 })
 
 
@@ -282,7 +292,7 @@ const generateVerificationTokenCtrl = expressAsyncHandler(async (req, res) => {
         await user.save();
         // console.log(verificationToken);
         //Build your message
-        const resetURL = `If your were requested to verify your account, please verify your account within 10 mins, otherwise ignore this meassage <a href="https://blogster-3m69.onrender.com/verify-account/${verificationToken}">Click to verify your account<a/>`;
+        const resetURL = `If your were requested to verify your account, please verify your account within 10 mins, otherwise ignore this meassage <a href="https://blogmantra-backend.onrender.com/verify-account/${verificationToken}">Click to verify your account<a/>`;
         // const testAccount = await nodemailer.createTestAccount();
         const transporter = await nodemailer.createTransport({
             service: 'gmail',
@@ -314,7 +324,7 @@ const generateVerificationTokenCtrl = expressAsyncHandler(async (req, res) => {
                     button: {
                         color: '#22BC66', // Optional action button color
                         text: 'Verify your account',
-                        link: `https://blogster-3m69.onrender.com/verify-account/${verificationToken}`
+                        link: `https://blogmantra-backend.onrender.com/verify-account/${verificationToken}`
                     }
                 },
                 outro: 'Do not reply to this email, It is an auto-generated email'
@@ -377,7 +387,7 @@ const forgotPasswordTokenCtrl = expressAsyncHandler(async (req, res) => {
         await user.save();
 
         //build your message
-        const resetURL = `If your were requested to reset your account, please reset your account within 10 mins, otherwise ignore this meassage <a href="https://blogster-3m69.onrender.com/reset-password/${token}">Click to verify your account<a/>`;
+        const resetURL = `If your were requested to reset your account, please reset your account within 10 mins, otherwise ignore this meassage <a href="https://blogmantra-backend.onrender.com/reset-password/${token}">Click to verify your account<a/>`;
         // const testAccount = await nodemailer.createTestAccount();
         const transporter = await nodemailer.createTransport({
             service: 'gmail',
@@ -393,7 +403,7 @@ const forgotPasswordTokenCtrl = expressAsyncHandler(async (req, res) => {
             theme: 'default',
             product: {
                 // Appears in header & footer of e-mails
-                name: 'Blogster',
+                name: 'BlogMantra',
                 link: 'https://mailgen.js/'
                 // Optional product logo
                 // logo: 'https://mailgen.js/img/logo.png'
@@ -410,7 +420,7 @@ const forgotPasswordTokenCtrl = expressAsyncHandler(async (req, res) => {
                     button: {
                         color: '#22BC66', // Optional action button color
                         text: 'Reset Password',
-                        link: `https://blogster-3m69.onrender.com/reset-password/${token}`
+                        link: `https://blogmantra-backend.onrender.com/reset-password/${token}`
                     }
                 },
                 outro: 'Do not reply to this email, It is an auto-generated email'
